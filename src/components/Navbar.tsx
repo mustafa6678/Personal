@@ -49,16 +49,16 @@ export function Navbar() {
       'fixed top-0 left-0 right-0 z-50 transition-all duration-500 border-b',
       isActive 
         ? 'bg-white/80 backdrop-blur-xl border-slate-200 py-3' 
-        : 'bg-transparent border-transparent py-6'
+        : 'bg-transparent border-transparent py-4 md:py-6'
     )}>
       <Container>
         <div className="flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 bg-violet-600 rounded-xl flex items-center justify-center group-hover:rotate-6 transition-transform shadow-lg shadow-violet-600/20">
-              <Smartphone className="w-6 h-6 text-white" />
+          <Link href="/" className="flex items-center gap-2 md:gap-3 group shrink-0">
+            <div className="w-8 h-8 md:w-10 md:h-10 bg-violet-600 rounded-lg md:rounded-xl flex items-center justify-center group-hover:rotate-6 transition-transform shadow-lg shadow-violet-600/20">
+              <Smartphone className="w-5 h-5 md:w-6 md:h-6 text-white" />
             </div>
             <span className={cn(
-              "text-xl font-black tracking-tighter transition-colors uppercase italic",
+              "text-base md:text-xl font-black tracking-tighter transition-colors uppercase italic leading-none",
               isActive ? "text-slate-900" : "text-white"
             )}>
               ThePhoneShop<span className="text-violet-500">Express.</span>
@@ -66,13 +66,13 @@ export function Navbar() {
           </Link>
 
           {/* Desktop Nav */}
-          <div className="hidden md:flex items-center gap-8">
+          <div className="hidden md:flex items-center gap-6 lg:gap-8">
             {navigation.map((item) => (
               <Link
                 key={item.name}
                 href={item.href}
                 className={cn(
-                  'text-[10px] font-black uppercase tracking-[0.3em] transition-all hover:text-violet-500 italic',
+                  'text-[10px] font-black uppercase tracking-[0.2em] transition-all hover:text-violet-500 italic',
                   pathname === item.href 
                     ? 'text-violet-500' 
                     : isActive ? 'text-slate-600' : 'text-white/80'
@@ -83,12 +83,12 @@ export function Navbar() {
             ))}
             <Link href="/contact" onClick={handleContactClick}>
               <button className={cn(
-                "px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center gap-3 group",
+                "px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center gap-2 group",
                 isActive 
                   ? "bg-slate-900 text-white hover:bg-violet-600 shadow-xl shadow-slate-900/10" 
                   : "bg-white text-slate-900 hover:bg-violet-50 shadow-2xl shadow-white/10"
               )}>
-                Contact Now
+                Contact
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </button>
             </Link>
@@ -99,8 +99,8 @@ export function Navbar() {
             <button 
               onClick={() => setIsOpen(!isOpen)} 
               className={cn(
-                "p-2",
-                isActive ? "text-slate-900" : "text-white"
+                "p-2 rounded-lg transition-colors",
+                isActive ? "text-slate-900 hover:bg-slate-50" : "text-white hover:bg-white/10"
               )}
             >
               {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -113,12 +113,12 @@ export function Navbar() {
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-white border-b border-slate-100 overflow-hidden"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className="md:hidden absolute top-full left-0 right-0 bg-white border-b border-slate-200 shadow-2xl overflow-hidden"
           >
-            <div className="p-8 flex flex-col gap-6">
+            <div className="p-6 flex flex-col gap-2">
               {navigation.map((item) => (
                 <Link
                   key={item.name}
@@ -127,17 +127,25 @@ export function Navbar() {
                     if (item.href === '/contact') handleContactClick(e);
                     else setIsOpen(false);
                   }}
-                  className="text-lg font-black uppercase italic text-slate-900 p-4 hover:bg-slate-50 rounded-2xl transition-colors flex items-center justify-between group"
+                  className={cn(
+                    "text-sm font-black uppercase italic p-4 rounded-xl transition-all flex items-center justify-between group",
+                    pathname === item.href ? "bg-violet-50 text-violet-600" : "text-slate-600 hover:bg-slate-50"
+                  )}
                 >
                   {item.name}
-                  <ArrowRight className="w-5 h-5 opacity-0 group-hover:opacity-100 -translate-x-4 group-hover:translate-x-0 transition-all" />
+                  <ArrowRight className={cn(
+                    "w-4 h-4 transition-all",
+                    pathname === item.href ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0"
+                  )} />
                 </Link>
               ))}
-              <Link href="/contact" onClick={handleContactClick}>
-                <button className="w-full bg-violet-600 text-white p-6 rounded-2xl font-black uppercase tracking-widest text-xs shadow-xl">
-                  Contact Now
-                </button>
-              </Link>
+              <div className="pt-4 mt-2 border-t border-slate-100">
+                <Link href="/contact" onClick={handleContactClick}>
+                  <button className="w-full bg-violet-600 text-white p-5 rounded-xl font-black uppercase tracking-widest text-[10px] shadow-lg shadow-violet-600/20 active:scale-95 transition-transform">
+                    Start Your Inquiry
+                  </button>
+                </Link>
+              </div>
             </div>
           </motion.div>
         )}
