@@ -1,52 +1,63 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: var(--font-bricolage);
+  --color-primary: #7c3aed;
+  --color-primary-dark: #6d28d9;
 }
 
 :root {
   --background: #ffffff;
   --foreground: #0f172a;
-  --accent: #7c3aed;     /* Electric Violet */
-  --accent-foreground: #ffffff;
-  --card: #f8fafc;
-  --card-foreground: #0f172a;
-  --border: #e2e8f0;
-  --input: #f8fafc;
-  --ring: #7c3aed;
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-sans), system-ui, sans-serif;
-  -webkit-font-smoothing: antialiased;
-}
-
-/* Modern Bento Card Style */
-.bento-card {
-  background: #ffffff;
-  border-radius: 2rem;
-  border: 1px solid #f1f5f9;
-  box-shadow: 0 0 0 0 rgba(124, 58, 237, 0);
-  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-}
-
-.bento-card:hover {
-  transform: translateY(-5px) scale(1.01);
-  border-color: #ddd6fe;
-  box-shadow: 0 20px 40px -15px rgba(124, 58, 237, 0.1);
-}
-
-.text-gradient {
-  background: linear-gradient(135deg, #7c3aed 0%, #4f46e5 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
+/* Fluid Typography for ultra-responsive scaling */
 @layer base {
-  h1, h2, h3, h4 {
-    letter-spacing: -0.05em;
-    font-weight: 800;
+  html {
+    scroll-behavior: smooth;
   }
+  
+  body {
+    @apply antialiased text-slate-900 bg-white overflow-x-hidden;
+    font-feature-settings: "ss01", "ss02", "cv01", "cv02";
+  }
+
+  /* Prevent text from breaking awkwardly on mobile */
+  h1, h2, h3, h4 {
+    @apply tracking-tighter leading-none uppercase italic font-black;
+    word-break: keep-all;
+    overflow-wrap: break-word;
+  }
+}
+
+/* Custom Responsive Utilities */
+@layer components {
+  .responsive-card {
+    @apply rounded-[2rem] md:rounded-[3.5rem] p-8 md:p-12 transition-all duration-500 border border-slate-100;
+  }
+
+  /* Fix for cards looking too long on mobile */
+  .card-grid {
+    @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-10;
+  }
+
+  .glass-panel {
+    @apply bg-white/10 backdrop-blur-xl border border-white/20;
+  }
+}
+
+/* Ensure images don't overflow their containers */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Custom scrollbar for premium feel */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  @apply bg-slate-50;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-slate-200 rounded-full hover:bg-violet-300 transition-colors;
 }
