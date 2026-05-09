@@ -30,10 +30,10 @@ export function Button({
   ...props
 }: ButtonProps) {
   const variants = {
-    primary: 'bg-slate-900 text-white hover:bg-slate-800 shadow-md',
-    secondary: 'bg-slate-100 text-slate-900 hover:bg-slate-200',
-    outline: 'border border-slate-200 bg-transparent hover:bg-slate-50 text-slate-700',
-    ghost: 'bg-transparent hover:bg-slate-100 text-slate-600',
+    primary: 'bg-primary text-white hover:bg-primary-dark shadow-md',
+    secondary: 'bg-secondary text-white hover:bg-black',
+    outline: 'border border-gray-200 bg-transparent hover:bg-gray-50 text-gray-700',
+    ghost: 'bg-transparent hover:bg-gray-100 text-gray-600',
   };
 
   const sizes = {
@@ -41,6 +41,7 @@ export function Button({
     md: 'px-5 py-2.5 text-base font-medium',
     lg: 'px-8 py-3.5 text-lg font-semibold',
   };
+
 
   return (
     <button

@@ -3,8 +3,8 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { Menu, X, Smartphone, ArrowRight } from 'lucide-react';
-import { Container, cn } from '@/components/ui';
+import { Menu, X, Smartphone, ArrowRight, ChevronRight } from 'lucide-react';
+import { Container, cn, Button } from '@/components/ui';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const navigation = [
@@ -19,7 +19,6 @@ export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
-  const isHomePage = pathname === '/';
 
   useEffect(() => {
     const handleScroll = () => {
@@ -29,80 +28,102 @@ export function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const handleContactClick = (e: React.MouseEvent) => {
-    if (isHomePage) {
-      e.preventDefault();
-      const contactSection = document.getElementById('contact');
-      if (contactSection) {
-        contactSection.scrollIntoView({ behavior: 'smooth' });
-      } else {
-        router.push('/contact');
-      }
+  const scrollToBooking = (e?: React.MouseEvent) => {
+    if (e) e.preventDefault();
+    const section = document.getElementById('booking-section');
+    if (section) {
+      section.scrollIntoView({ behavior: 'smooth' });
+      setIsOpen(false);
+    } else {
+      router.push('/#booking-section');
     }
-    setIsOpen(false);
   };
-
-  const isActive = scrolled || !isHomePage;
 
   return (
     <nav className={cn(
-      'fixed top-0 left-0 right-0 z-50 transition-all duration-500 border-b',
-      isActive 
-        ? 'bg-white/80 backdrop-blur-xl border-slate-200 py-3' 
-        : 'bg-transparent border-transparent py-4 md:py-6'
+      'fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b',
+      scrolled 
+        ? 'bg-white border-gray-100 py-4 shadow-sm' 
+        : 'bg-white/90 backdrop-blur-md border-transparent py-5'
     )}>
       <Container>
         <div className="flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2 md:gap-3 group shrink-0">
-            <div className="w-8 h-8 md:w-10 md:h-10 bg-violet-600 rounded-lg md:rounded-xl flex items-center justify-center group-hover:rotate-6 transition-transform shadow-lg shadow-violet-600/20">
-              <Smartphone className="w-5 h-5 md:w-6 md:h-6 text-white" />
+          <Link href="/" className="flex items-center gap-2 group shrink-0">
+            <div className="flex flex-col leading-none">
+              <span className="text-xl md:text-2xl font-black tracking-tighter text-secondary uppercase italic">
+                THE<span className="text-primary ml-1">PHONE SHOP</span>
+              </span>
+              <span className="text-[10px] font-black uppercase tracking-[0.4em] text-primary -mt-1 ml-1">Express</span>
             </div>
-            <span className={cn(
-              "text-base md:text-xl font-black tracking-tighter transition-colors uppercase italic leading-none",
-              isActive ? "text-slate-900" : "text-white"
-            )}>
-              ThePhoneShop<span className="text-violet-500">Express.</span>
-            </span>
           </Link>
 
           {/* Desktop Nav */}
-          <div className="hidden md:flex items-center gap-6 lg:gap-8">
-            {navigation.map((item) => (
+          <div className="hidden lg:flex items-center gap-10">
+            <div className="relative group/menu">
+              <button className="flex items-center gap-1 text-xs font-black uppercase tracking-widest text-secondary hover:text-primary transition-colors cursor-pointer">
+                We Repair <ChevronRight className="w-3 h-3 rotate-90" />
+              </button>
+              {/* Mega Menu */}
+              <div className="absolute top-full left-1/2 -translate-x-1/2 pt-6 opacity-0 translate-y-4 pointer-events-none group-hover/menu:opacity-100 group-hover/menu:translate-y-0 group-hover/menu:pointer-events-auto transition-all duration-300 z-50">
+                <div className="bg-white rounded-3xl shadow-2xl border border-gray-100 p-10 w-[700px] grid grid-cols-3 gap-10">
+                  <div>
+                    <h4 className="text-[10px] font-black uppercase tracking-widest text-primary mb-6">Mobile Phones</h4>
+                    <ul className="space-y-4">
+                      {['iPhone', 'Samsung', 'Google Pixel', 'Huawei', 'OnePlus'].map(item => (
+                        <li key={item}><button onClick={() => scrollToBooking()} className="text-xs font-bold text-gray-500 hover:text-primary transition-colors">{item}</button></li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div>
+                    <h4 className="text-[10px] font-black uppercase tracking-widest text-primary mb-6">Tablets & More</h4>
+                    <ul className="space-y-4">
+                      {['iPad', 'Samsung Tab', 'Surface Pro', 'Apple Watch', 'Nintendo Switch'].map(item => (
+                        <li key={item}><button onClick={() => scrollToBooking()} className="text-xs font-bold text-gray-500 hover:text-primary transition-colors">{item}</button></li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div>
+                    <h4 className="text-[10px] font-black uppercase tracking-widest text-primary mb-6">Computers</h4>
+                    <ul className="space-y-4">
+                      {['MacBook', 'iMac', 'Windows Laptop', 'PC Build', 'Data Recovery'].map(item => (
+                        <li key={item}><button onClick={() => scrollToBooking()} className="text-xs font-bold text-gray-500 hover:text-primary transition-colors">{item}</button></li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            { [
+              { name: 'Buy & Sell', href: '/buy-sell' },
+              { name: 'Business', href: '/business' },
+              { name: 'About', href: '/about' },
+              { name: 'Contact', href: '/contact' }
+            ].map((item) => (
               <Link
                 key={item.name}
                 href={item.href}
-                className={cn(
-                  'text-[10px] font-black uppercase tracking-[0.2em] transition-all hover:text-violet-500 italic',
-                  pathname === item.href 
-                    ? 'text-violet-500' 
-                    : isActive ? 'text-slate-600' : 'text-white/80'
-                )}
+                className="text-xs font-black uppercase tracking-widest text-secondary hover:text-primary transition-colors"
               >
                 {item.name}
               </Link>
             ))}
-            <Link href="/contact" onClick={handleContactClick}>
-              <button className={cn(
-                "px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center gap-2 group",
-                isActive 
-                  ? "bg-slate-900 text-white hover:bg-violet-600 shadow-xl shadow-slate-900/10" 
-                  : "bg-white text-slate-900 hover:bg-violet-50 shadow-2xl shadow-white/10"
-              )}>
-                Contact
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </button>
-            </Link>
+            
+            <div className="flex items-center gap-4 border-l border-gray-100 pl-8">
+              <div className="text-right">
+                <p className="text-[8px] font-black uppercase tracking-widest text-gray-400">Call Us</p>
+                <p className="text-xs font-black text-secondary">01772 123456</p>
+              </div>
+
+              <Button onClick={() => scrollToBooking()} size="sm" className="px-6 rounded-full text-[10px] font-black uppercase tracking-widest active:scale-95 transition-transform">
+                Book Repair
+              </Button>
+            </div>
           </div>
 
           {/* Mobile Menu Toggle */}
-          <div className="md:hidden">
-            <button 
-              onClick={() => setIsOpen(!isOpen)} 
-              className={cn(
-                "p-2 rounded-lg transition-colors",
-                isActive ? "text-slate-900 hover:bg-slate-50" : "text-white hover:bg-white/10"
-              )}
-            >
+          <div className="lg:hidden">
+            <button onClick={() => setIsOpen(!isOpen)} className="p-2 text-secondary active:scale-90 transition-transform">
               {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
           </div>
@@ -113,43 +134,39 @@ export function Navbar() {
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="md:hidden absolute top-full left-0 right-0 bg-white border-b border-slate-200 shadow-2xl overflow-hidden"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            className="lg:hidden bg-white border-t border-gray-100 overflow-hidden"
           >
-            <div className="p-6 flex flex-col gap-2">
-              {navigation.map((item) => (
-                <Link
-                  key={item.name}
+            <div className="p-6 flex flex-col gap-4">
+              {[
+                { name: 'Home', href: '/' },
+                { name: 'We Repair', href: '/#booking-section' },
+                { name: 'Buy & Sell', href: '/buy-sell' },
+                { name: 'Business', href: '/business' },
+                { name: 'About', href: '/about' },
+                { name: 'Contact', href: '/contact' }
+              ].map((item) => (
+                <Link 
+                  key={item.name} 
                   href={item.href}
-                  onClick={(e) => {
-                    if (item.href === '/contact') handleContactClick(e);
-                    else setIsOpen(false);
-                  }}
-                  className={cn(
-                    "text-sm font-black uppercase italic p-4 rounded-xl transition-all flex items-center justify-between group",
-                    pathname === item.href ? "bg-violet-50 text-violet-600" : "text-slate-600 hover:bg-slate-50"
-                  )}
+                  onClick={() => setIsOpen(false)} 
+                  className="text-left text-sm font-black uppercase tracking-widest text-secondary p-4 hover:bg-gray-50 rounded-2xl transition-colors"
                 >
                   {item.name}
-                  <ArrowRight className={cn(
-                    "w-4 h-4 transition-all",
-                    pathname === item.href ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0"
-                  )} />
                 </Link>
               ))}
-              <div className="pt-4 mt-2 border-t border-slate-100">
-                <Link href="/contact" onClick={handleContactClick}>
-                  <button className="w-full bg-violet-600 text-white p-5 rounded-xl font-black uppercase tracking-widest text-[10px] shadow-lg shadow-violet-600/20 active:scale-95 transition-transform">
-                    Start Your Inquiry
-                  </button>
-                </Link>
-              </div>
+              <Button onClick={() => scrollToBooking()} className="w-full py-5 mt-4 rounded-2xl font-black uppercase tracking-widest text-xs">
+                Book Repair Now
+              </Button>
             </div>
+
           </motion.div>
         )}
       </AnimatePresence>
     </nav>
   );
 }
+
+
