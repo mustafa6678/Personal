@@ -5,15 +5,55 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { StepIndicator } from './StepIndicator';
 import { RepairComparison } from './RepairComparison';
 import { Container, Button, cn } from '@/components/ui';
-import { ArrowRight, ArrowLeft, MapPin, Mail, Check } from 'lucide-react';
+import { ArrowRight, ArrowLeft, MapPin, Mail, Check, Loader2, CheckCircle2, AlertCircle } from 'lucide-react';
 import Image from 'next/image';
+import { sendContactEmail } from '@/app/actions';
 
 export function BookingFlow() {
   const [step, setStep] = useState(1);
   const [selectedDevice, setSelectedDevice] = useState<string | null>(null);
+  const [selectedRepair, setSelectedRepair] = useState<string | null>(null);
+  const [selectedMethod, setSelectedMethod] = useState<string | null>(null);
+  
+  // Form State
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
+    message: ''
+  });
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
 
   const nextStep = () => setStep(prev => Math.min(prev + 1, 4));
   const prevStep = () => setStep(prev => Math.max(prev - 1, 1));
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setStatus('loading');
+    
+    const serviceString = `[Booking] ${selectedDevice} - ${selectedRepair || 'Standard Repair'} (${selectedMethod || 'Walk-In'})`;
+    const fullName = `${formData.firstName} ${formData.lastName}`.trim();
+    
+    const result = await sendContactEmail({
+      name: fullName || 'Valued Customer',
+      email: formData.email,
+      phone: formData.phone,
+      service: serviceString,
+      message: formData.message || 'No additional details provided.'
+    });
+
+    if (result.success) {
+      setStatus('success');
+    } else {
+      setStatus('error');
+      setTimeout(() => setStatus('idle'), 5000);
+    }
+  };
 
   const devices = [
     { name: 'iPhone', image: 'https://images.unsplash.com/photo-1510557880182-3d4d3cba35a5?q=80&w=400&auto=format&fit=crop', color: 'text-gray-600', bg: 'bg-gray-100', hoverBg: 'hover:bg-gray-200' },
@@ -95,7 +135,6 @@ export function BookingFlow() {
             </motion.div>
           )}
 
-
           {step === 2 && (
             <motion.div
               key="step2"
@@ -116,12 +155,17 @@ export function BookingFlow() {
                 Choose Repair Type
               </h2>
               
-              {/* Repair Categories Tabs (Simplified) */}
               <div className="flex flex-wrap justify-center gap-4 mb-12">
                 {['Screen Repair', 'Battery', 'Charging Port', 'Camera', 'Back Glass', 'Water Damage', 'Other / Not Sure'].map((cat) => (
                   <button 
                     key={cat}
-                    className="px-6 py-3 rounded-full border-2 border-gray-100 font-bold text-sm text-gray-500 hover:border-primary hover:text-primary transition-all active:scale-95"
+                    onClick={() => setSelectedRepair(cat)}
+                    className={cn(
+                      "px-6 py-3 rounded-full border-2 font-bold text-sm transition-all active:scale-95",
+                      selectedRepair === cat 
+                        ? "border-primary bg-primary text-white" 
+                        : "border-gray-100 text-gray-500 hover:border-primary hover:text-primary"
+                    )}
                   >
                     {cat}
                   </button>
@@ -154,7 +198,7 @@ export function BookingFlow() {
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <button 
-                  onClick={nextStep}
+                  onClick={() => { setSelectedMethod('Walk-In'); nextStep(); }}
                   className="p-10 rounded-2xl border-2 border-gray-100 hover:border-primary hover:bg-primary/5 text-left group transition-all"
                 >
                   <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mb-6">
@@ -167,7 +211,7 @@ export function BookingFlow() {
                 </button>
 
                 <button 
-                  onClick={nextStep}
+                  onClick={() => { setSelectedMethod('Mail-In'); nextStep(); }}
                   className="p-10 rounded-2xl border-2 border-gray-100 hover:border-primary hover:bg-primary/5 text-left group transition-all"
                 >
                   <div className="w-16 h-16 rounded-2xl bg-secondary/10 flex items-center justify-center mb-6">
@@ -191,43 +235,82 @@ export function BookingFlow() {
               className="max-w-2xl mx-auto bg-gray-50 p-8 md:p-12 rounded-3xl border border-gray-200"
             >
               <div className="flex items-center justify-between mb-8">
-                <Button variant="ghost" onClick={prevStep} className="gap-2">
+                <Button variant="ghost" onClick={prevStep} className="gap-2" disabled={status === 'success' || status === 'loading'}>
                   <ArrowLeft className="w-4 h-4" /> Back to Fixing Way
                 </Button>
               </div>
               <h2 className="text-3xl font-black text-secondary mb-8 uppercase tracking-tighter italic">
                 Finalize Booking
               </h2>
-              <form className="space-y-6">
-                <div className="grid grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">First Name</label>
-                    <input type="text" className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 outline-none focus:border-primary transition-colors" />
+              
+              {status === 'success' ? (
+                <div className="text-center py-12">
+                  <div className="w-20 h-20 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <CheckCircle2 className="w-10 h-10 text-emerald-600" />
+                  </div>
+                  <h3 className="text-2xl font-black text-secondary uppercase italic mb-4">Booking Received</h3>
+                  <p className="text-gray-500 font-medium mb-8">
+                    Thank you! Our technical team will review your request and contact you shortly with the next steps.
+                  </p>
+                  <Button onClick={() => window.location.reload()} variant="outline" className="rounded-full">Book Another Repair</Button>
+                </div>
+              ) : (
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  {status === 'error' && (
+                    <div className="p-4 bg-red-50 border border-red-100 rounded-xl flex items-center gap-3 text-red-600 text-sm font-bold">
+                      <AlertCircle className="w-5 h-5 shrink-0" />
+                      Failed to send booking request. Please try again.
+                    </div>
+                  )}
+                  
+                  <div className="grid grid-cols-2 gap-6">
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">First Name</label>
+                      <input required type="text" name="firstName" value={formData.firstName} onChange={handleInputChange} className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 outline-none focus:border-primary transition-colors" />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Last Name</label>
+                      <input required type="text" name="lastName" value={formData.lastName} onChange={handleInputChange} className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 outline-none focus:border-primary transition-colors" />
+                    </div>
                   </div>
                   <div className="space-y-2">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Last Name</label>
-                    <input type="text" className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 outline-none focus:border-primary transition-colors" />
+                    <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Email Address</label>
+                    <input required type="email" name="email" value={formData.email} onChange={handleInputChange} className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 outline-none focus:border-primary transition-colors" />
                   </div>
-                </div>
-                <div className="space-y-2">
-                  <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Email Address</label>
-                  <input type="email" className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 outline-none focus:border-primary transition-colors" />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Phone Number</label>
-                  <input type="tel" className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 outline-none focus:border-primary transition-colors" />
-                </div>
-                
-                <div className="pt-6 border-t border-gray-200 mt-8">
-                  <div className="flex flex-col items-center justify-center gap-6">
-                    <Button size="lg" className="w-full">Confirm Booking</Button>
-                    <p className="text-[10px] text-gray-400 font-medium text-center">
-                      By confirming, you agree to our terms and conditions. No payment is required now. <br/>
-                      Our team will contact you shortly to confirm the repair details.
-                    </p>
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Phone Number</label>
+                    <input required type="tel" name="phone" minLength={10} value={formData.phone} onChange={handleInputChange} className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 outline-none focus:border-primary transition-colors" />
                   </div>
-                </div>
-              </form>
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">What happened to your device?</label>
+                    <textarea 
+                      required 
+                      name="message" 
+                      value={formData.message} 
+                      onChange={handleInputChange} 
+                      rows={4}
+                      placeholder="e.g. Dropped it and the screen cracked..."
+                      className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 outline-none focus:border-primary transition-colors resize-none" 
+                    />
+                  </div>
+                  
+                  <div className="pt-6 border-t border-gray-200 mt-8">
+                    <div className="flex flex-col items-center justify-center gap-6">
+                      <Button type="submit" size="lg" className="w-full" disabled={status === 'loading'}>
+                        {status === 'loading' ? (
+                          <><Loader2 className="w-5 h-5 mr-2 animate-spin" /> Processing Booking...</>
+                        ) : (
+                          'Confirm Booking'
+                        )}
+                      </Button>
+                      <p className="text-[10px] text-gray-400 font-medium text-center">
+                        By confirming, you agree to our terms and conditions. No payment is required now. <br/>
+                        Our team will contact you shortly to confirm the repair details.
+                      </p>
+                    </div>
+                  </div>
+                </form>
+              )}
             </motion.div>
           )}
         </AnimatePresence>
@@ -235,4 +318,5 @@ export function BookingFlow() {
     </section>
   );
 }
+
 
