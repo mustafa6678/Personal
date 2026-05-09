@@ -20,10 +20,10 @@ export function BookingFlow() {
     { name: 'Samsung', image: 'https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?q=80&w=400&auto=format&fit=crop', color: 'text-blue-600', bg: 'bg-blue-50', hoverBg: 'hover:bg-blue-100' },
     { name: 'iPad / Tablet', image: 'https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?q=80&w=400&auto=format&fit=crop', color: 'text-indigo-600', bg: 'bg-indigo-50', hoverBg: 'hover:bg-indigo-100' },
     { name: 'MacBook / Laptop', image: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?q=80&w=400&auto=format&fit=crop', color: 'text-slate-700', bg: 'bg-slate-100', hoverBg: 'hover:bg-slate-200' },
-    { name: 'Gaming Console', image: 'https://images.unsplash.com/photo-1606144042871-2020b9736b41?q=80&w=400&auto=format&fit=crop', color: 'text-red-600', bg: 'bg-red-50', hoverBg: 'hover:bg-red-100' },
-    { name: 'Google Pixel', image: 'https://images.unsplash.com/photo-1598327105666-5b89351cb315?q=80&w=400&auto=format&fit=crop', color: 'text-emerald-600', bg: 'bg-emerald-50', hoverBg: 'hover:bg-emerald-100' },
+    { name: 'Gaming Console', image: 'https://images.unsplash.com/photo-1605901309584-818e25960b8f?q=80&w=400&auto=format&fit=crop', color: 'text-red-600', bg: 'bg-red-50', hoverBg: 'hover:bg-red-100' },
+    { name: 'Google Pixel', image: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?q=80&w=400&auto=format&fit=crop', color: 'text-emerald-600', bg: 'bg-emerald-50', hoverBg: 'hover:bg-emerald-100' },
     { name: 'Apple Watch', image: 'https://images.unsplash.com/photo-1434493789847-2f02dc6ca35d?q=80&w=400&auto=format&fit=crop', color: 'text-rose-600', bg: 'bg-rose-50', hoverBg: 'hover:bg-rose-100' },
-    { name: 'Other Device', image: 'https://images.unsplash.com/photo-1550009158-9effb61970eb?q=80&w=400&auto=format&fit=crop', color: 'text-orange-600', bg: 'bg-orange-50', hoverBg: 'hover:bg-orange-100' },
+    { name: 'Other Device', image: 'https://images.unsplash.com/photo-1491933382434-500287f9b54b?q=80&w=400&auto=format&fit=crop', color: 'text-orange-600', bg: 'bg-orange-50', hoverBg: 'hover:bg-orange-100' },
   ];
 
   return (
