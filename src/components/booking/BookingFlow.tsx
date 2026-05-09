@@ -24,6 +24,7 @@ export function BookingFlow() {
     message: ''
   });
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [errorMessage, setErrorMessage] = useState<string>('');
 
   const nextStep = () => setStep(prev => Math.min(prev + 1, 4));
   const prevStep = () => setStep(prev => Math.max(prev - 1, 1));
@@ -35,6 +36,7 @@ export function BookingFlow() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus('loading');
+    setErrorMessage('');
     
     const serviceString = `[Booking] ${selectedDevice} - ${selectedRepair || 'Standard Repair'} (${selectedMethod || 'Walk-In'})`;
     const fullName = `${formData.firstName} ${formData.lastName}`.trim();
@@ -51,6 +53,7 @@ export function BookingFlow() {
       setStatus('success');
     } else {
       setStatus('error');
+      setErrorMessage(result.error || 'Failed to send booking request. Please try again.');
       setTimeout(() => setStatus('idle'), 5000);
     }
   };
@@ -259,7 +262,7 @@ export function BookingFlow() {
                   {status === 'error' && (
                     <div className="p-4 bg-red-50 border border-red-100 rounded-xl flex items-center gap-3 text-red-600 text-sm font-bold">
                       <AlertCircle className="w-5 h-5 shrink-0" />
-                      Failed to send booking request. Please try again.
+                      {errorMessage}
                     </div>
                   )}
                   
