@@ -29,8 +29,8 @@ export default function Home() {
                 Same-day service with manufacturer-grade components.
               </p>
               <div className="flex flex-wrap gap-4">
-                <Button size="lg" className="px-10 rounded-full">Book Your Repair</Button>
-                <Button variant="outline" size="lg" className="px-10 rounded-full">View All Services</Button>
+                <Button href="#book" size="lg" className="px-10 rounded-full">Book Your Repair</Button>
+                <Button href="/repairs" variant="outline" size="lg" className="px-10 rounded-full">View All Services</Button>
               </div>
             </div>
             <div className="lg:col-span-5 relative">

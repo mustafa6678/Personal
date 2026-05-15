@@ -1,5 +1,6 @@
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
+import Link from 'next/link';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -21,12 +22,14 @@ export function Container({ children, className }: ContainerProps) {
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: 'primary' | 'secondary' | 'outline' | 'ghost';
   size?: 'sm' | 'md' | 'lg';
+  href?: string;
 }
 
 export function Button({
   className,
   variant = 'primary',
   size = 'md',
+  href,
   ...props
 }: ButtonProps) {
   const variants = {
@@ -43,14 +46,24 @@ export function Button({
   };
 
 
+  const classes = cn(
+    'inline-flex items-center justify-center rounded-lg transition-all duration-300 active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none',
+    variants[variant],
+    sizes[size],
+    className
+  );
+
+  if (href) {
+    return (
+      <Link href={href} className={classes} onClick={props.onClick as any}>
+        {props.children}
+      </Link>
+    );
+  }
+
   return (
     <button
-      className={cn(
-        'inline-flex items-center justify-center rounded-lg transition-all duration-300 active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none',
-        variants[variant],
-        sizes[size],
-        className
-      )}
+      className={classes}
       {...props}
     />
   );
