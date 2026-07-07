@@ -30,7 +30,7 @@ const contactDetails = [
   },
   {
     title: 'Studio Location',
-    value: 'Preston, United Kingdom',
+    value: '592 Blackpool Road, Ashton-on-Ribble, Preston',
     icon: MapPin,
     href: '#'
   }

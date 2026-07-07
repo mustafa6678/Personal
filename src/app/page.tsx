@@ -21,7 +21,7 @@ export default function Home() {
                 </span>
               </div>
               <h1 className="text-4xl md:text-6xl lg:text-8xl font-black tracking-tighter text-secondary uppercase italic leading-[0.9] mb-8">
-                London's Leading <br />
+                Preston's Leading <br />
                 <span className="text-primary">Repair Experts.</span>
               </h1>
               <p className="text-lg md:text-xl text-gray-500 font-medium leading-relaxed max-w-2xl mb-10">
