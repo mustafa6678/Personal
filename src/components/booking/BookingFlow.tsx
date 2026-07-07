@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { StepIndicator } from './StepIndicator';
 import { RepairComparison } from './RepairComparison';
@@ -14,7 +14,8 @@ export function BookingFlow() {
   const [selectedDevice, setSelectedDevice] = useState<string | null>(null);
   const [selectedRepair, setSelectedRepair] = useState<string | null>(null);
   const [selectedMethod, setSelectedMethod] = useState<string | null>(null);
-  
+  const sectionRef = useRef<HTMLElement>(null);
+
   // Form State
   const [formData, setFormData] = useState({
     firstName: '',
@@ -26,8 +27,18 @@ export function BookingFlow() {
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState<string>('');
 
-  const nextStep = () => setStep(prev => Math.min(prev + 1, 4));
-  const prevStep = () => setStep(prev => Math.max(prev - 1, 1));
+  const scrollToTop = () => {
+    sectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
+  const nextStep = () => {
+    setStep(prev => Math.min(prev + 1, 4));
+    scrollToTop();
+  };
+  const prevStep = () => {
+    setStep(prev => Math.max(prev - 1, 1));
+    scrollToTop();
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
@@ -70,7 +81,7 @@ export function BookingFlow() {
   ];
 
   return (
-    <section id="booking-section" className="bg-white py-12 scroll-mt-24">
+    <section id="booking-section" ref={sectionRef} className="bg-white py-12 scroll-mt-24">
       <StepIndicator currentStep={step} />
       
       <Container className="mt-12 min-h-[600px]">
