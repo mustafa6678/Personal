@@ -1,12 +1,13 @@
 'use client';
 
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Container, Button } from '@/components/ui';
-import { 
-  Smartphone, 
-  ArrowRight, 
-  RotateCcw, 
-  ShieldCheck, 
+import {
+  Smartphone,
+  ArrowRight,
+  RotateCcw,
+  ShieldCheck,
   CheckCircle2,
   Cpu,
   Battery,
@@ -14,6 +15,7 @@ import {
 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { QuoteModal } from '@/components/QuoteModal';
 
 const featuredProducts = [
   {
@@ -35,8 +37,11 @@ const featuredProducts = [
 ];
 
 export default function BuySellPage() {
+  const [isQuoteOpen, setIsQuoteOpen] = useState(false);
+
   return (
     <main className="pt-24 bg-white">
+      <QuoteModal isOpen={isQuoteOpen} onClose={() => setIsQuoteOpen(false)} />
       {/* Official-Style Hero */}
       <section className="py-20 md:py-32 bg-gray-50 border-b border-gray-100">
         <Container>
@@ -60,7 +65,7 @@ export default function BuySellPage() {
               Get an instant technical valuation for your device and 
               apply it towards a certified refurbished flagship.
             </p>
-            <Button size="lg" className="px-12 rounded-full">Get Your Quote</Button>
+            <Button size="lg" className="px-12 rounded-full" onClick={() => setIsQuoteOpen(true)}>Get Your Quote</Button>
           </div>
         </Container>
       </section>
