@@ -85,7 +85,7 @@ export async function sendContactEmail(data: ContactFormData) {
             
             <div style="margin: 40px 0; padding: 30px; background-color: #f8fafc; border-radius: 20px; text-align: center;">
               <p style="font-size: 10px; color: #64748b; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px;">Immediate Assistance</p>
-              <p style="font-size: 24px; color: ${brandColor}; font-weight: bold; margin: 0; font-style: italic;">07459 763380</p>
+              <p style="font-size: 24px; color: ${brandColor}; font-weight: bold; margin: 0; font-style: italic;">+44 7459 763380</p>
             </div>
 
             <p style="font-size: 13px; color: #94a3b8; line-height: 1.6; font-style: italic; text-align: center;">

@@ -171,7 +171,7 @@ export default function BuySellPage() {
               <Link href="/contact" className="w-full sm:w-auto">
                 <Button size="lg" className="w-full rounded-full px-10">Contact Specialist</Button>
               </Link>
-              <a href="tel:07459763380" className="w-full sm:w-auto">
+              <a href="tel:+447459763380" className="w-full sm:w-auto">
                 <Button variant="outline" size="lg" className="w-full rounded-full px-10">Call Studio</Button>
               </a>
             </div>

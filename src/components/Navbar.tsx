@@ -112,7 +112,7 @@ export function Navbar() {
             <div className="flex items-center gap-4 border-l border-gray-100 pl-8">
               <div className="text-right">
                 <p className="text-[8px] font-black uppercase tracking-widest text-gray-400">Call Us</p>
-                <p className="text-xs font-black text-secondary">01772 123456</p>
+                <p className="text-xs font-black text-secondary">+44 7459 763380</p>
               </div>
 
               <Button onClick={() => scrollToBooking()} size="sm" className="px-6 rounded-full text-[10px] font-black uppercase tracking-widest active:scale-95 transition-transform">

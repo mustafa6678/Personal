@@ -18,15 +18,15 @@ import {
 const contactDetails = [
   {
     title: 'Inquiry Line',
-    value: '07459 763380',
+    value: '+44 7459 763380',
     icon: Phone,
-    href: 'tel:07459763380'
+    href: 'tel:+447459763380'
   },
   {
     title: 'Digital Support',
-    value: 'contact@thephoneshopexpress.co.uk',
+    value: 'tpshopexpress@gmail.com',
     icon: Mail,
-    href: 'mailto:contact@thephoneshopexpress.co.uk'
+    href: 'mailto:tpshopexpress@gmail.com'
   },
   {
     title: 'Studio Location',
