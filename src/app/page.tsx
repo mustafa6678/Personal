@@ -1,12 +1,19 @@
+'use client';
+
+import { useState } from 'react';
 import { BookingFlow } from "@/components/booking/BookingFlow";
 import { Container, Button } from "@/components/ui";
 import { Shield, Clock, Award, Star, ArrowRight, CheckCircle2 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { BuyInquiryModal } from '@/components/BuyInquiryModal';
 
 export default function Home() {
+  const [isBuyOpen, setIsBuyOpen] = useState(false);
+
   return (
     <div className="pt-24">
+      <BuyInquiryModal isOpen={isBuyOpen} onClose={() => setIsBuyOpen(false)} />
       {/* New Hero Section */}
       <section className="bg-white py-12 md:py-20 border-b border-gray-100">
         <Container>
@@ -125,7 +132,7 @@ export default function Home() {
                   <p className="text-[10px] font-black uppercase tracking-widest text-gray-500">Cosmetic Status</p>
                 </div>
               </div>
-              <Button size="lg" className="w-full sm:w-auto px-12 rounded-full">Shop All Models</Button>
+              <Button size="lg" className="w-full sm:w-auto px-12 rounded-full" onClick={() => setIsBuyOpen(true)}>Shop All Models</Button>
             </div>
             <div className="lg:col-span-7">
               <div className="rounded-[3rem] overflow-hidden border-[12px] border-white/5 shadow-2xl">

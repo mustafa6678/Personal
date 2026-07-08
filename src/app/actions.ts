@@ -1,7 +1,7 @@
 'use server';
 
 import nodemailer from 'nodemailer';
-import { contactSchema, type ContactFormData } from '@/lib/schemas';
+import { contactSchema, type ContactFormData, buyInquirySchema, type BuyInquiryFormData } from '@/lib/schemas';
 
 const transporter = nodemailer.createTransport({
   host: process.env.EMAIL_HOST,
@@ -101,6 +101,60 @@ export async function sendContactEmail(data: ContactFormData) {
             </div>
             <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.05); margin: 30px 0;">
             <p style="color: #475569; font-size: 9px; text-transform: uppercase; letter-spacing: 1px;">© ${new Date().getFullYear()} ThePhoneShopExpress. All Rights Reserved.</p>
+          </div>
+        </div>
+      `,
+    });
+
+    return { success: true };
+  } catch (error) {
+    console.error('Email error:', error);
+    return { success: false, error: 'Failed to send message. Please try again later.' };
+  }
+}
+
+export async function sendBuyInquiryEmail(data: BuyInquiryFormData) {
+  const result = buyInquirySchema.safeParse(data);
+
+  if (!result.success) {
+    return { success: false, error: 'Invalid form data.' };
+  }
+
+  const brandColor = '#7c3aed';
+  const darkColor = '#0f172a';
+
+  try {
+    await transporter.sendMail({
+      from: `"Studio Portal" <${process.env.EMAIL_USER}>`,
+      to: process.env.ADMIN_EMAIL,
+      subject: `[BUY INQUIRY] ${data.name}`,
+      html: `
+        <div style="font-family: 'Inter', sans-serif; max-width: 600px; margin: 0 auto; background-color: #ffffff; border: 1px solid #f1f5f9; border-radius: 24px; overflow: hidden; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);">
+          <div style="background-color: ${darkColor}; padding: 40px; text-align: center;">
+            <h1 style="color: #ffffff; margin: 0; font-size: 20px; text-transform: uppercase; letter-spacing: 4px; font-style: italic;">ThePhoneShop<span style="color: ${brandColor};">Express.</span></h1>
+            <p style="color: #94a3b8; font-size: 10px; text-transform: uppercase; letter-spacing: 2px; margin-top: 10px;">Device Purchase Inquiry</p>
+          </div>
+          <div style="padding: 40px;">
+            <div style="margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid #f1f5f9;">
+              <p style="font-size: 10px; color: #64748b; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px;">Customer Profile</p>
+              <h2 style="font-size: 24px; color: ${darkColor}; margin: 0; font-style: italic;">${data.name}</h2>
+              <p style="font-size: 14px; color: #64748b; margin-top: 5px;">${data.phone}</p>
+            </div>
+
+            <div style="margin-bottom: 30px;">
+              <p style="font-size: 10px; color: #64748b; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px;">Delivery / Contact Address</p>
+              <p style="font-size: 15px; color: #334155; line-height: 1.6;">${data.address}</p>
+            </div>
+
+            <div style="margin-bottom: 30px;">
+              <p style="font-size: 10px; color: #64748b; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px;">Device Details</p>
+              <p style="font-size: 15px; color: #334155; line-height: 1.6; font-style: italic;">"${data.message}"</p>
+            </div>
+
+            <a href="tel:${data.phone}" style="display: block; width: 100%; background-color: ${brandColor}; color: #ffffff; text-align: center; padding: 18px; border-radius: 14px; text-decoration: none; font-weight: bold; text-transform: uppercase; font-size: 12px; letter-spacing: 2px;">Initiate Contact</a>
+          </div>
+          <div style="background-color: #f8fafc; padding: 20px; text-align: center; border-top: 1px solid #f1f5f9;">
+            <p style="font-size: 10px; color: #94a3b8; margin: 0;">Automated System | Professional Engineering Standards</p>
           </div>
         </div>
       `,
