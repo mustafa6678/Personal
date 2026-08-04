@@ -2,6 +2,7 @@
 
 import nodemailer from 'nodemailer';
 import { contactSchema, type ContactFormData, buyInquirySchema, type BuyInquiryFormData } from '@/lib/schemas';
+import { siteConfig } from '@/lib/site-config';
 
 const transporter = nodemailer.createTransport({
   host: process.env.EMAIL_HOST,
@@ -103,7 +104,7 @@ export async function sendContactEmail(data: ContactFormData) {
               Mon - Sat | Professional Engineering
             </div>
             <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.05); margin: 30px 0;">
-            <p style="color: #475569; font-size: 9px; text-transform: uppercase; letter-spacing: 1px;">© ${new Date().getFullYear()} ThePhoneShopExpress. All Rights Reserved.</p>
+            <p style="color: #475569; font-size: 9px; text-transform: uppercase; letter-spacing: 1px;">© ${new Date().getFullYear()} ${siteConfig.name}. All Rights Reserved.</p>
           </div>
         </div>
       `,
