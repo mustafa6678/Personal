@@ -17,9 +17,7 @@ function RepairOption({ type, features, recommended, selected, onSelect }: Repai
       'relative p-6 rounded-2xl border-2 transition-all duration-300',
       selected
         ? 'border-primary bg-primary/5 shadow-xl scale-105 z-10'
-        : recommended
-          ? 'border-primary/40 bg-primary/5 hover:border-primary'
-          : 'border-gray-100 bg-white hover:border-gray-200'
+        : 'border-gray-100 bg-white hover:border-gray-200'
     )}>
       {recommended && (
         <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-primary text-white text-[10px] font-black uppercase tracking-widest px-4 py-1 rounded-full">
@@ -27,7 +25,7 @@ function RepairOption({ type, features, recommended, selected, onSelect }: Repai
         </div>
       )}
       <div className="text-center mb-6">
-        <h3 className={`text-xl font-black uppercase tracking-tighter ${selected || recommended ? 'text-primary' : 'text-secondary'}`}>
+        <h3 className={`text-xl font-black uppercase tracking-tighter ${selected ? 'text-primary' : 'text-secondary'}`}>
           {type}
         </h3>
         <div className="mt-2 flex items-baseline justify-center gap-1">
@@ -47,7 +45,7 @@ function RepairOption({ type, features, recommended, selected, onSelect }: Repai
       <Button
         type="button"
         onClick={onSelect}
-        variant={selected || recommended ? 'primary' : 'outline'}
+        variant={selected ? 'primary' : 'outline'}
         className="w-full py-4 text-xs font-black uppercase tracking-widest gap-2"
       >
         {selected && <Check className="w-4 h-4" />}
