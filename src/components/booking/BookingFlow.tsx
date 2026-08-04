@@ -13,6 +13,7 @@ export function BookingFlow() {
   const [step, setStep] = useState(1);
   const [selectedDevice, setSelectedDevice] = useState<string | null>(null);
   const [selectedRepair, setSelectedRepair] = useState<string | null>(null);
+  const [selectedQuality, setSelectedQuality] = useState<'Standard' | 'Premium' | null>(null);
   const [selectedMethod, setSelectedMethod] = useState<string | null>(null);
   const sectionRef = useRef<HTMLElement>(null);
 
@@ -49,7 +50,7 @@ export function BookingFlow() {
     setStatus('loading');
     setErrorMessage('');
     
-    const serviceString = `[Booking] ${selectedDevice} - ${selectedRepair || 'Standard Repair'} (${selectedMethod || 'Walk-In'})`;
+    const serviceString = `[Booking] ${selectedDevice} - ${selectedRepair || 'Standard Repair'} - ${selectedQuality || 'Standard'} Quality (${selectedMethod || 'Walk-In'})`;
     const fullName = `${formData.firstName} ${formData.lastName}`.trim();
     
     const result = await sendContactEmail({
@@ -186,10 +187,10 @@ export function BookingFlow() {
                 ))}
               </div>
 
-              <RepairComparison />
-              
+              <RepairComparison selected={selectedQuality} onSelect={setSelectedQuality} />
+
               <div className="flex justify-center mt-12">
-                <Button onClick={nextStep} size="lg" className="gap-2 px-12">
+                <Button onClick={nextStep} size="lg" disabled={!selectedQuality} className="gap-2 px-12">
                   Continue to Fixing Way <ArrowRight className="w-5 h-5" />
                 </Button>
               </div>
