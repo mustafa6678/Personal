@@ -46,6 +46,9 @@ export const metadata: Metadata = {
     title: `${siteConfig.name} | Phone, Tablet & Laptop Repair in Preston`,
     description: siteConfig.description,
   },
+  verification: {
+    google: '62dXK6VwPbBB-V5sN6SRMlEBIaPaj_WGtPI1KCwLi0w',
+  },
 };
 
 export default function RootLayout({
