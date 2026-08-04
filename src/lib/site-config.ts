@@ -12,7 +12,7 @@ const phoneHref = 'tel:+447459763380';
 
 export const siteConfig = {
   name: 'The Phone Shop Express & Repair Centre',
-  url: process.env.NEXT_PUBLIC_SITE_URL || 'https://thephoneshopexpress.co.uk',
+  url: process.env.NEXT_PUBLIC_SITE_URL || 'https://www.thephoneshopexpress.co.uk',
   description:
     'Professional phone, tablet, laptop and console repairs in Preston. Same-day iPhone and Samsung screen repair, battery replacement and more, with a 12-month warranty.',
   phone: phoneDisplay,
