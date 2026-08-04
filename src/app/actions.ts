@@ -24,8 +24,11 @@ export async function sendContactEmail(data: ContactFormData) {
   const darkColor = '#0f172a'; // slate-950
 
   try {
-    // 1. Send Technical Brief to Admin
-    await transporter.sendMail({
+    // Send the admin brief and customer confirmation concurrently so one
+    // slow/failed send doesn't stall or block the other.
+    const [adminResult, customerResult] = await Promise.allSettled([
+      // 1. Send Technical Brief to Admin
+      transporter.sendMail({
       from: `"Studio Portal" <${process.env.EMAIL_USER}>`,
       to: process.env.ADMIN_EMAIL,
       subject: `[INQUIRY] ${data.service.toUpperCase()} - ${data.name}`,
@@ -61,10 +64,10 @@ export async function sendContactEmail(data: ContactFormData) {
           </div>
         </div>
       `,
-    });
+      }),
 
-    // 2. Send Premium Confirmation to User
-    await transporter.sendMail({
+      // 2. Send Premium Confirmation to User
+      transporter.sendMail({
       from: `"The Phone Shop Express" <${process.env.EMAIL_USER}>`,
       to: data.email,
       subject: `Your Inquiry: ${data.service} - The Phone Shop Express`,
@@ -104,7 +107,17 @@ export async function sendContactEmail(data: ContactFormData) {
           </div>
         </div>
       `,
-    });
+      }),
+    ]);
+
+    if (adminResult.status === 'rejected') {
+      console.error('Email error (admin brief):', adminResult.reason);
+      return { success: false, error: 'Failed to send message. Please try again later.' };
+    }
+
+    if (customerResult.status === 'rejected') {
+      console.error('Email error (customer confirmation):', customerResult.reason);
+    }
 
     return { success: true };
   } catch (error) {
