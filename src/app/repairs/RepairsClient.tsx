@@ -23,42 +23,51 @@ const services = [
     title: 'Flagship Smartphones',
     desc: 'Expert screen restoration, battery optimization, and logic board diagnostics for iPhone and Samsung.',
     price: 'From £35',
-    features: ['OEM Grade Parts', '1-Hour Express', '12mo Warranty']
+    features: ['OEM Grade Parts', '1-Hour Express', '12mo Warranty'],
+    links: [
+      { label: 'iPhone Repair', href: '/repairs/iphone-repair' },
+      { label: 'Samsung Repair', href: '/repairs/samsung-repair' },
+    ]
   },
   {
     icon: Gamepad2,
     title: 'Gaming Consoles',
     desc: 'HDMI port replacement, thermal management, and internal drive upgrades for PS5, Xbox, and Switch.',
     price: 'From £45',
-    features: ['Deep Cleaning', 'Technical Diagnostics', 'Fast Return']
+    features: ['Deep Cleaning', 'Technical Diagnostics', 'Fast Return'],
+    links: [{ label: 'Console Repair', href: '/repairs/games-console-repair' }]
   },
   {
     icon: Laptop,
     title: 'Laptops & MacBooks',
     desc: 'Keyboard replacement, liquid damage recovery, and storage upgrades for professional workstations.',
     price: 'From £65',
-    features: ['Data Integrity', 'Certified Components', 'Free Quote']
+    features: ['Data Integrity', 'Certified Components', 'Free Quote'],
+    links: [{ label: 'Laptop Repair', href: '/repairs/laptop-macbook-repair' }]
   },
   {
     icon: Tablet,
     title: 'Tablets & iPads',
     desc: 'Precision glass replacement and digitizer restoration for all professional tablet ecosystems.',
     price: 'From £40',
-    features: ['Dust-Free Studio', 'Color Calibrated', 'Same-Day']
+    features: ['Dust-Free Studio', 'Color Calibrated', 'Same-Day'],
+    links: [{ label: 'Tablet Repair', href: '/repairs/ipad-tablet-repair' }]
   },
   {
     icon: Watch,
     title: 'Smartwatches',
     desc: 'Technical battery replacement and screen restoration for Apple Watch and flagship wearables.',
     price: 'From £30',
-    features: ['Waterproof Testing', 'Seal Restoration', 'Technical Fix']
+    features: ['Waterproof Testing', 'Seal Restoration', 'Technical Fix'],
+    links: [{ label: 'Watch Repair', href: '/repairs/smartwatch-repair' }]
   },
   {
     icon: Speaker,
     title: 'Audio Systems',
     desc: 'Charging port and driver restoration for premium headphones and high-fidelity audio equipment.',
     price: 'From £25',
-    features: ['Original Drivers', 'Micro-Soldering', 'Tested Integrity']
+    features: ['Original Drivers', 'Micro-Soldering', 'Tested Integrity'],
+    links: [] as { label: string; href: string }[]
   }
 ];
 
@@ -126,11 +135,23 @@ export default function RepairsClient() {
 
                 <div className="flex items-center justify-between pt-6 border-t border-gray-100">
                   <span className="text-xl md:text-2xl font-black text-secondary italic">{service.price}</span>
-                  <Link href="/contact">
-                    <button className="px-6 py-2.5 md:px-8 md:py-3 bg-secondary text-white rounded-xl text-[8px] md:text-[10px] font-black uppercase tracking-widest hover:bg-primary transition-all">
-                      Book Now
-                    </button>
-                  </Link>
+                  {service.links.length > 0 ? (
+                    <div className="flex flex-wrap justify-end gap-2">
+                      {service.links.map((link) => (
+                        <Link key={link.href} href={link.href}>
+                          <button className="px-4 py-2.5 md:px-6 md:py-3 bg-secondary text-white rounded-xl text-[8px] md:text-[10px] font-black uppercase tracking-widest hover:bg-primary transition-all whitespace-nowrap">
+                            {link.label}
+                          </button>
+                        </Link>
+                      ))}
+                    </div>
+                  ) : (
+                    <Link href="/contact">
+                      <button className="px-6 py-2.5 md:px-8 md:py-3 bg-secondary text-white rounded-xl text-[8px] md:text-[10px] font-black uppercase tracking-widest hover:bg-primary transition-all">
+                        Book Now
+                      </button>
+                    </Link>
+                  )}
                 </div>
               </motion.div>
             ))}

@@ -98,6 +98,7 @@ export function Navbar() {
             { [
               { name: 'Buy & Sell', href: '/buy-sell' },
               { name: 'Business', href: '/business' },
+              { name: 'Blog', href: '/blog' },
               { name: 'About', href: '/about' },
               { name: 'Contact', href: '/contact' }
             ].map((item) => (
@@ -146,11 +147,12 @@ export function Navbar() {
                 { name: 'We Repair', href: '/#booking-section' },
                 { name: 'Buy & Sell', href: '/buy-sell' },
                 { name: 'Business', href: '/business' },
+                { name: 'Blog', href: '/blog' },
                 { name: 'About', href: '/about' },
                 { name: 'Contact', href: '/contact' }
               ].map((item) => (
-                <Link 
-                  key={item.name} 
+                <Link
+                  key={item.name}
                   href={item.href}
                   onClick={() => setIsOpen(false)} 
                   className="text-left text-sm font-black uppercase tracking-widest text-secondary p-4 hover:bg-gray-50 rounded-2xl transition-colors"

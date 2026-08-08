@@ -46,8 +46,14 @@ export function Footer() {
           <div>
             <h4 className="text-xs font-black uppercase tracking-widest text-primary mb-8">Popular Repairs</h4>
             <ul className="space-y-4">
-              {['iPhone Screen Repair', 'Samsung Battery Fix', 'iPad Glass Replacement', 'MacBook Keyboard Repair', 'Nintendo Switch HDMI'].map(item => (
-                <li key={item}><Link href="/repairs" className="text-sm font-bold text-gray-400 hover:text-white transition-colors">{item}</Link></li>
+              {[
+                { name: 'iPhone Screen Repair', href: '/repairs/iphone-repair' },
+                { name: 'Samsung Battery Fix', href: '/repairs/samsung-repair' },
+                { name: 'iPad Glass Replacement', href: '/repairs/ipad-tablet-repair' },
+                { name: 'MacBook Keyboard Repair', href: '/repairs/laptop-macbook-repair' },
+                { name: 'Nintendo Switch HDMI', href: '/repairs/games-console-repair' },
+              ].map(item => (
+                <li key={item.name}><Link href={item.href} className="text-sm font-bold text-gray-400 hover:text-white transition-colors">{item.name}</Link></li>
               ))}
             </ul>
           </div>
@@ -58,6 +64,7 @@ export function Footer() {
               {[
                 { name: 'Book a Repair', href: '/#book' },
                 { name: 'Business Accounts', href: '/business' },
+                { name: 'Repair Blog', href: '/blog' },
                 { name: 'About Us', href: '/about' },
                 { name: 'Contact Support', href: '/contact' },
               ].map(item => (
